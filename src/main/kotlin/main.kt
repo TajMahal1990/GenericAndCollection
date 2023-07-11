@@ -1,11 +1,11 @@
-package ru.netology
 
 fun main() {
-    ChatService.addMessage(1, Message(type = "Nov1", text = "Hi asshole"))
-    ChatService.addMessage(1, Message(type = "Nov2", text = "Hi buddy"))
-    ChatService.addMessage(1, Message(type = "Nov1", text = "Whats app?"))
-    ChatService.addMessage(2, Message(type = "Nov2", text = "Good thanks"))
-//    ChatService.addMessage(2, Message(type = "Nov1", text = ":)))"))
+    ChatService.addMessage(1, Message(type = "in", text = "Hello"))
+    ChatService.addMessage(1, Message(type = "out", text = "Hi"))
+    ChatService.addMessage(1, Message(type = "in", text = "how are you?"))
+    ChatService.addMessage(2, Message(type = "out", text = "OK"))
+//    ChatService.addMessage(2, Message(type = "in", text = ":)))"))
+//    ChatService.addMessage(1, Message(type = "in", text = "OK"))
 //    ChatService.print()
     println(ChatService.lastMessages())
     //ChatService.getMessages(1, 1)
@@ -18,16 +18,16 @@ fun main() {
 class NotFoundException(message: String) : RuntimeException(message)
 
 data class Message(
-    var messageId: Int? = null,
-    val type: String,
-    var text: String,
-    var deleted: Boolean = false,
-    var read: Boolean = false
+        var messageId: Int? = null,
+        val type: String,
+        var text: String,
+        var deleted: Boolean = false,
+        var read: Boolean = false
 )
 
 data class Chat(
-    var chatId: Int? = null,
-    var messages: MutableList<Message> = mutableListOf()
+        var chatId: Int? = null,
+        var messages: MutableList<Message> = mutableListOf()
 )
 
 object ChatService {
@@ -40,30 +40,30 @@ object ChatService {
     }
 
     fun lastMessages() = chats.values.asSequence()
-        .map { it.messages.last() }
-        .filter { !it.deleted }
-        .joinToString(separator = "\n") { it.text }
-        .ifEmpty { throw NotFoundException("Нет чатов") }
+            .map { it.messages.last() }
+            .filter { !it.deleted }
+            .joinToString(separator = "\n") { it.text }
+            .ifEmpty { throw NotFoundException("Нет чатов") }
 
     fun getMessages(userId: Int, messageId: Int): List<Message> =
-        chats[userId]
-            .let { it?.messages ?: throw NotFoundException("Нет чатов") }
-            .asSequence()
-            .filter { !it.deleted && it.type == "in" }
-            .drop(messageId)
-            .onEach { it.read = true }
-            .toList()
+            chats[userId]
+                    .let { it?.messages ?: throw NotFoundException("Нет чатов") }
+                    .asSequence()
+                    .filter { !it.deleted && it.type == "in" }
+                    .drop(messageId)
+                    .onEach { it.read = true }
+                    .toList()
     fun getUnreadChatsCount() = chats.values
-        .count { it -> it.messages.any { !it.read && it.type == "in" } }
+            .count { it -> it.messages.any { !it.read && it.type == "in" } }
     fun getChats(): Map<Int, Chat> {
         return chats
     }
 
     fun deleteMessage(chatId: Int, messageId: Int): Boolean {
         chats[chatId]
-            .let { it?.messages ?: throw NotFoundException("Нет чатов") }
-            .take(messageId)
-            .onEach { it.deleted = true }
+                .let { it?.messages ?: throw NotFoundException("Нет чатов") }
+                .take(messageId)
+                .onEach { it.deleted = true }
         return true
     }
 
@@ -76,9 +76,9 @@ object ChatService {
 
     fun editMessage(chatId: Int, messageId: Int, newText: String): Boolean {
         chats[chatId]
-            .let { it?.messages ?: throw NotFoundException("Нет чатов") }
-            .take(messageId)
-            .onEach { it.text = newText }
+                .let { it?.messages ?: throw NotFoundException("Нет чатов") }
+                .take(messageId)
+                .onEach { it.text = newText }
         return true
     }
 
@@ -93,3 +93,9 @@ object ChatService {
     }
 
 }
+
+
+
+
+
+
